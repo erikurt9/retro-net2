@@ -1121,6 +1121,96 @@ export const REAL_VIDEOS = [
   "color": "#3A8B88",
   "src": "/media/archivo/videos/20240212_102154.mp4",
   "poster": "/media/archivo/posters/20240212_102154.jpg"
+ },
+ {
+  "id": "rv_20240212_110258",
+  "kind": "personal",
+  "title": "Caminando por la ruta con cordillera",
+  "desc": "12 feb 2024 · 11:02",
+  "dur": 16,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_110258.mp4",
+  "poster": "/media/archivo/posters/20240212_110258.jpg"
+ },
+ {
+  "id": "rv_20240212_113128",
+  "kind": "personal",
+  "title": "Camino hacia la cordillera",
+  "desc": "12 feb 2024 · 11:31",
+  "dur": 18,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_113128.mp4",
+  "poster": "/media/archivo/posters/20240212_113128.jpg"
+ },
+ {
+  "id": "rv_20240212_115805",
+  "kind": "personal",
+  "title": "Río blanco entre árboles caídos",
+  "desc": "12 feb 2024 · 11:58",
+  "dur": 6,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_115805.mp4",
+  "poster": "/media/archivo/posters/20240212_115805.jpg"
+ },
+ {
+  "id": "rv_20240212_125247",
+  "kind": "personal",
+  "title": "Tronco cubierto de musgo",
+  "desc": "12 feb 2024 · 12:52",
+  "dur": 19,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_125247.mp4",
+  "poster": "/media/archivo/posters/20240212_125247.jpg"
+ },
+ {
+  "id": "rv_20240212_132957",
+  "kind": "personal",
+  "title": "Selfie bajo los árboles",
+  "desc": "12 feb 2024 · 13:29",
+  "dur": 13,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_132957.mp4",
+  "poster": "/media/archivo/posters/20240212_132957.jpg"
+ },
+ {
+  "id": "rv_20240212_134105",
+  "kind": "personal",
+  "title": "Cascadas entre el bosque",
+  "desc": "12 feb 2024 · 13:41",
+  "dur": 10,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_134105.mp4",
+  "poster": "/media/archivo/posters/20240212_134105.jpg"
+ },
+ {
+  "id": "rv_20240212_134432",
+  "kind": "personal",
+  "title": "Roca en el agua turquesa",
+  "desc": "12 feb 2024 · 13:44",
+  "dur": 9,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_134432.mp4",
+  "poster": "/media/archivo/posters/20240212_134432.jpg"
+ },
+ {
+  "id": "rv_20240212_134539",
+  "kind": "personal",
+  "title": "Selfie frente a la cascada",
+  "desc": "12 feb 2024 · 13:45",
+  "dur": 17,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_134539.mp4",
+  "poster": "/media/archivo/posters/20240212_134539.jpg"
+ },
+ {
+  "id": "rv_20240212_151919",
+  "kind": "personal",
+  "title": "Piedras en el suelo",
+  "desc": "12 feb 2024 · 15:19",
+  "dur": 12,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_151919.mp4",
+  "poster": "/media/archivo/posters/20240212_151919.jpg"
  }
 ]
 export const EXPEDITIONS = [
@@ -1239,8 +1329,17 @@ export const EXPEDITIONS = [
     ],
     "videos": [
      "rv_20240212_102154",
+     "rv_20240212_110258",
+     "rv_20240212_113128",
+     "rv_20240212_115805",
      "sv2",
-     "sv3"
+     "sv3",
+     "rv_20240212_125247",
+     "rv_20240212_132957",
+     "rv_20240212_134105",
+     "rv_20240212_134432",
+     "rv_20240212_134539",
+     "rv_20240212_151919"
     ]
    },
    {

@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef } from 'react'
-import { Camera, Film, Music2, Search, Play, Pause, Rewind, FastForward, SkipBack, SkipForward, Volume2, X, Sun, Moon, Tv, Mic, Clapperboard, Users, Database, Backpack } from 'lucide-react'
+import { Camera, Film, Music2, Search, Play, Pause, Rewind, FastForward, SkipBack, SkipForward, Volume2, X, Sun, Moon, Tv, Mic, Clapperboard, Users, Database, Backpack, ChevronLeft, ChevronRight } from 'lucide-react'
 import { REAL_PHOTOS, REAL_VIDEOS, EXPEDITIONS } from './archivo.js'
 
 /* ===================== DATOS DE PRUEBA ===================== */
@@ -80,7 +80,7 @@ const TABS = [
 const now = new Date()
 const initial = {
   tab: 'quienes', exp: EXPEDITIONS[0].id, query: '', era: 'todo', kind: 'personal', crt: true, dark: true, burst: false,
-  track: 0, playing: false, pos: 0, volume: 70, video: null, vPlaying: false, vPos: 0, photo: null,
+  track: 0, playing: false, pos: 0, volume: 70, video: null, vPlaying: false, vPos: 0, photo: null, plist: [],
   date: `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
 }
 function reducer(s, a) {
@@ -91,6 +91,11 @@ function reducer(s, a) {
     case 'vtick': return { ...s, vPos: Math.min(s.vPos + 1, VIDEOS.find(v => v.id === s.video)?.dur ?? 0) }
     case 'pickTrack': return { ...s, track: a.v, pos: 0, playing: true }
     case 'next': return { ...s, track: (s.track + a.d + TRACKS.length) % TRACKS.length, pos: 0 }
+    case 'navPhoto': {
+      const l = s.plist ?? []
+      const n = s.photo ? l[l.findIndex(x => x.id === s.photo.id) + a.d] : null
+      return n ? { ...s, photo: n } : s
+    }
     default: return s
   }
 }
@@ -100,6 +105,9 @@ export default function App() {
   const [s, d] = useReducer(reducer, initial)
   const searchRef = useRef(null)
   const videoRef = useRef(null)
+  const touchX = useRef(0)
+  const sRef = useRef(s)
+  sRef.current = s
   const set = v => d({ type: 'set', v })
   const tr = TRACKS[s.track]
   const cv = VIDEOS.find(v => v.id === s.video)
@@ -117,6 +125,8 @@ export default function App() {
     const k = e => {
       if (e.key === '/' && document.activeElement.tagName !== 'INPUT') { e.preventDefault(); searchRef.current?.focus() }
       if (e.key === 'Escape') d({ type: 'set', v: { photo: null } })
+      if (sRef.current.photo && e.key === 'ArrowRight') d({ type: 'navPhoto', d: 1 })
+      if (sRef.current.photo && e.key === 'ArrowLeft') d({ type: 'navPhoto', d: -1 })
     }
     window.addEventListener('keydown', k)
     return () => window.removeEventListener('keydown', k)
@@ -137,6 +147,10 @@ export default function App() {
     if (e.key === 'ArrowRight') d({ type: 'tab', v: TABS[(i + 1) % TABS.length].id })
     if (e.key === 'ArrowLeft') d({ type: 'tab', v: TABS[(i + TABS.length - 1) % TABS.length].id })
   }
+  const pl = s.plist ?? []
+  const pi = s.photo ? pl.findIndex(x => x.id === s.photo.id) : -1
+  const vi = videos.findIndex(v => v.id === s.video)
+  const goVideo = dir => { const n = videos[vi + dir]; if (n) set({ video: n.id, vPos: 0, vPlaying: true }) }
   const mover = n => {
     const t = Math.max(0, Math.min(cv?.dur ?? 0, s.vPos + n))
     if (videoRef.current) videoRef.current.currentTime = t
@@ -240,7 +254,7 @@ export default function App() {
                           )}
                           <ul className={`mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6 ${st.photos.length ? '' : 'hidden'}`}>
                             {st.photos.map(id => { const p = PHOTO_BY_ID[id]; return (
-                              <li key={id}><button onClick={() => set({ photo: p })} aria-label={`Abrir foto: ${p.title}`} className="btn block overflow-hidden rounded-lg transition hover:scale-105"><img src={p.thumb} alt={p.title} loading="lazy" className="aspect-square w-full object-cover" /></button></li>
+                              <li key={id}><button onClick={() => set({ photo: p, plist: st.photos.map(x => PHOTO_BY_ID[x]) })} aria-label={`Abrir foto: ${p.title}`} className="btn block overflow-hidden rounded-lg transition hover:scale-105"><img src={p.thumb} alt={p.title} loading="lazy" className="aspect-square w-full object-cover" /></button></li>
                             ) })}
                           </ul>
                         </div>
@@ -262,7 +276,7 @@ export default function App() {
                 <ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
                   {photos.map((p, i) => (
                     <li key={p.id} className="pop" style={{ animationDelay: `${i * 80}ms` }}>
-                      <button onClick={() => set({ photo: p })} aria-label={`Abrir foto: ${p.title}, ${p.year}`} style={{ transform: `rotate(${i % 2 ? 2 : -2}deg)` }}
+                      <button onClick={() => set({ photo: p, plist: photos })} aria-label={`Abrir foto: ${p.title}, ${p.year}`} style={{ transform: `rotate(${i % 2 ? 2 : -2}deg)` }}
                         className="btn block w-full bg-[#FBF7F3] p-3 pb-10 text-left text-[#2A211C] shadow-[0_8px_22px_rgba(0,0,0,.45)] transition hover:!rotate-0 hover:scale-[1.03]">
                         {p.thumb ? <img src={p.thumb} alt={p.title} loading="lazy" className="develop aspect-square w-full object-cover" style={{ animationDelay: `${i * 80}ms` }} /> : <div className="develop grid aspect-square place-items-center" style={{ background: `linear-gradient(135deg, ${p.from}, ${p.to})`, animationDelay: `${i * 80}ms` }}><Camera size={40} className="text-white/70" aria-hidden="true" /></div>}
                         <p className="mt-3 font-type text-sm">{p.title}</p>
@@ -289,7 +303,7 @@ export default function App() {
                 <div className="grid gap-6 lg:grid-cols-[1.3fr_1fr]">
                   <div className="neo rounded-2xl p-4">
                     <div className={`relative grid aspect-video place-items-center overflow-hidden rounded-xl border-4 border-[#0d0c0b] ${s.crt ? 'scan' : ''}`} style={{ background: cv ? `radial-gradient(circle at 50% 40%, ${cv.color}, #0d0c0b 85%)` : '#0d0c0b' }}>
-                      {cv?.src && <video key={cv.id} ref={videoRef} src={cv.src} poster={cv.poster} playsInline preload="metadata" onTimeUpdate={e => set({ vPos: Math.floor(e.currentTarget.currentTime) })} onEnded={() => set({ vPlaying: false })} className="absolute inset-0 h-full w-full object-cover" />}
+                      {cv?.src && <video key={cv.id} ref={videoRef} src={cv.src} poster={cv.poster} playsInline preload="metadata" onTimeUpdate={e => set({ vPos: Math.floor(e.currentTarget.currentTime) })} onEnded={() => (videos[vi + 1] ? goVideo(1) : set({ vPlaying: false }))} className="absolute inset-0 h-full w-full object-cover" />}
                       <StaticGif on={s.burst || !cv} />
                       {s.vPlaying && <><img src="/gifs/tracking.gif" alt="" aria-hidden="true" style={{ imageRendering: 'pixelated' }} className="pointer-events-none absolute inset-0 z-[4] h-full w-full object-cover opacity-60 mix-blend-screen" /><img src="/gifs/rec.gif" alt="" aria-hidden="true" className="absolute left-3 top-2 z-10 h-7" /></>}
                       {cv?.src ? <p className="absolute bottom-2 left-3 z-10 bg-black/60 px-2 font-lcd text-xl text-white">{s.vPlaying ? '▶' : '❚❚'} {cv.title}</p> : cv ? (
@@ -301,9 +315,11 @@ export default function App() {
                     </div>
                     <div className="mt-2 flex justify-between font-lcd text-xl"><span>{fmt(s.vPos)}</span><span>{fmt(cv?.dur ?? 0)}</span></div>
                     <div className="mt-2 flex justify-center gap-3">
+                      <Ctl label="Video anterior" onClick={() => goVideo(-1)}><SkipBack size={18} /></Ctl>
                       <Ctl label="Retroceder 10 segundos" onClick={() => mover(-10)}><Rewind size={18} /></Ctl>
                       <Ctl big label={s.vPlaying ? 'Pausar' : 'Reproducir'} onClick={() => cv && set({ vPlaying: !s.vPlaying })}>{s.vPlaying ? <Pause size={22} /> : <Play size={22} />}</Ctl>
                       <Ctl label="Adelantar 10 segundos" onClick={() => mover(10)}><FastForward size={18} /></Ctl>
+                      <Ctl label="Video siguiente" onClick={() => goVideo(1)}><SkipForward size={18} /></Ctl>
                     </div>
                   </div>
                   <ul className="grid content-start gap-4">
@@ -395,12 +411,20 @@ export default function App() {
         {s.photo && (
           <div role="dialog" aria-modal="true" aria-label={s.photo.title} className="fixed inset-0 z-40 grid place-items-center bg-black/80 p-4" onClick={() => set({ photo: null })}>
             <div className={`fade-in max-h-full w-full ${s.photo.src ? 'max-w-3xl' : 'max-w-md'} overflow-auto bg-[#FBF7F3] p-4 text-[#2A211C]`} onClick={e => e.stopPropagation()}>
-              <div className={`develop relative ${s.photo.src ? '' : 'grid aspect-square place-items-center'}`} style={s.photo.src ? undefined : { background: `linear-gradient(135deg, ${s.photo.from}, ${s.photo.to})` }}>
+              <div key={s.photo.id} onTouchStart={e => { touchX.current = e.touches[0].clientX }} onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchX.current; if (Math.abs(dx) > 50) d({ type: 'navPhoto', d: dx < 0 ? 1 : -1 }) }} className={`develop relative ${s.photo.src ? '' : 'grid aspect-square place-items-center'}`} style={s.photo.src ? undefined : { background: `linear-gradient(135deg, ${s.photo.from}, ${s.photo.to})` }}>
                 {s.photo.src ? <img src={s.photo.src} alt={s.photo.title} className="w-full" /> : <Camera size={64} className="text-white/70" aria-hidden="true" />}
                 <button autoFocus aria-label="Cerrar" onClick={() => set({ photo: null })} className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-black/60 text-white"><X size={18} /></button>
+                {pi > 0 && <button aria-label="Foto anterior" onClick={() => d({ type: 'navPhoto', d: -1 })} className="btn absolute left-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/55 text-white"><ChevronLeft size={22} /></button>}
+                {pi >= 0 && pi < pl.length - 1 && <button aria-label="Foto siguiente" onClick={() => d({ type: 'navPhoto', d: 1 })} className="btn absolute right-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/55 text-white"><ChevronRight size={22} /></button>}
               </div>
-              <h3 className="mt-4 font-display text-2xl font-black">{s.photo.title}</h3>
-              <p className="font-lcd text-xl text-[#C23B22]">{s.photo.year} · {s.photo.place}</p>
+              {[pl[pi - 1], pl[pi + 1]].filter(x => x?.src).map(x => <img key={x.id} src={x.src} alt="" className="hidden" />)}
+              {pi >= 0 && pl.length > 1 && (
+                <div className="mt-3 flex items-center justify-center gap-1.5" aria-label={`Foto ${pi + 1} de ${pl.length}`}>
+                  {pl.length <= 12 ? pl.map((x, i) => <span key={x.id} className={`h-2 rounded-full transition-all ${i === pi ? 'w-5 bg-[#E05A47]' : 'w-2 bg-[#2A211C]/30'}`} />) : <span className="font-lcd text-xl text-[#7A6A60]">{pi + 1} / {pl.length}</span>}
+                </div>
+              )}
+              <h3 className="mt-3 font-display text-2xl font-black">{s.photo.title}</h3>
+              <p className="font-lcd text-xl text-[#C23B22]">{s.photo.src ? s.photo.place : `${s.photo.year} · ${s.photo.place}`}</p>
               <p className="mt-2 font-type">{s.photo.note}</p>
             </div>
           </div>
