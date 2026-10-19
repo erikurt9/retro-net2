@@ -1,4 +1,4 @@
-// Generado a partir de las fotos del archivo. Edita títulos aquí.
+// Generado a partir de las fotos y videos del archivo. Edita títulos aquí.
 export const REAL_PHOTOS = [
  {
   "id": "p_20240211_142746",
@@ -921,13 +921,147 @@ export const REAL_PHOTOS = [
   "note": "Foto del 30 de ago de 2021."
  }
 ]
+export const REAL_VIDEOS = [
+ {
+  "id": "rv_20240208_193856",
+  "kind": "personal",
+  "title": "Costa al atardecer",
+  "desc": "8 feb 2024 · 19:38",
+  "dur": 7,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240208_193856.mp4",
+  "poster": "/media/archivo/posters/20240208_193856.jpg"
+ },
+ {
+  "id": "rv_20240208_213018",
+  "kind": "personal",
+  "title": "Luces de la ciudad de noche",
+  "desc": "8 feb 2024 · 21:30",
+  "dur": 7,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240208_213018.mp4",
+  "poster": "/media/archivo/posters/20240208_213018.jpg"
+ },
+ {
+  "id": "rv_20240211_075003",
+  "kind": "personal",
+  "title": "Figuras pintadas en la plaza",
+  "desc": "11 feb 2024 · 07:50",
+  "dur": 17,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_075003.mp4",
+  "poster": "/media/archivo/posters/20240211_075003.jpg"
+ },
+ {
+  "id": "rv_20240211_090411",
+  "kind": "personal",
+  "title": "Mercado bajo la lluvia",
+  "desc": "11 feb 2024 · 09:04",
+  "dur": 8,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_090411.mp4",
+  "poster": "/media/archivo/posters/20240211_090411.jpg"
+ },
+ {
+  "id": "rv_20240211_090521",
+  "kind": "personal",
+  "title": "Bahía con lanchas y bruma",
+  "desc": "11 feb 2024 · 09:05",
+  "dur": 10,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_090521.mp4",
+  "poster": "/media/archivo/posters/20240211_090521.jpg"
+ },
+ {
+  "id": "rv_20240211_101841",
+  "kind": "personal",
+  "title": "Papas de colores",
+  "desc": "11 feb 2024 · 10:18",
+  "dur": 6,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_101841.mp4",
+  "poster": "/media/archivo/posters/20240211_101841.jpg"
+ },
+ {
+  "id": "rv_20240211_141017",
+  "kind": "personal",
+  "title": "Mar abierto bajo las nubes",
+  "desc": "11 feb 2024 · 14:10",
+  "dur": 8,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_141017.mp4",
+  "poster": "/media/archivo/posters/20240211_141017.jpg"
+ },
+ {
+  "id": "rv_20240211_142654",
+  "kind": "personal",
+  "title": "Caleta con lanchas al pie del cerro",
+  "desc": "11 feb 2024 · 14:26",
+  "dur": 4,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_142654.mp4",
+  "poster": "/media/archivo/posters/20240211_142654.jpg"
+ },
+ {
+  "id": "rv_20240211_144106",
+  "kind": "personal",
+  "title": "El mar desde el ferry",
+  "desc": "11 feb 2024 · 14:41",
+  "dur": 28,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_144106.mp4",
+  "poster": "/media/archivo/posters/20240211_144106.jpg"
+ },
+ {
+  "id": "rv_20240211_144300",
+  "kind": "personal",
+  "title": "Selfie en cubierta",
+  "desc": "11 feb 2024 · 14:43",
+  "dur": 14,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_144300.mp4",
+  "poster": "/media/archivo/posters/20240211_144300.jpg"
+ },
+ {
+  "id": "rv_20240211_150058",
+  "kind": "personal",
+  "title": "Barco rojo frente a la cordillera",
+  "desc": "11 feb 2024 · 15:00",
+  "dur": 15,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_150058.mp4",
+  "poster": "/media/archivo/posters/20240211_150058.jpg"
+ }
+]
 export const EXPEDITIONS = [
  {
   "id": "feb2024",
   "title": "Feb 2024 · Carretera Austral",
-  "range": "11 – 20 feb 2024",
+  "range": "8 – 20 feb 2024",
   "blurb": "Ruta de mochila con dos ferris, ríos turquesa, bosques y un parque nacional. Los lugares salen de los letreros visibles en las fotos.",
   "stops": [
+   {
+    "day": "JUE 8 FEB",
+    "title": "Antes de salir",
+    "note": "Costa de día y luces de la ciudad de noche, un par de días antes de la ruta.",
+    "photos": [],
+    "videos": [
+     "rv_20240208_193856",
+     "rv_20240208_213018"
+    ]
+   },
+   {
+    "day": "DOM 11 FEB · MAÑANA",
+    "title": "Plaza, mercado y bahía",
+    "note": "Figuras pintadas en la plaza, mercado bajo la lluvia, lanchas entre la bruma y papas de colores.",
+    "photos": [],
+    "videos": [
+     "rv_20240211_075003",
+     "rv_20240211_090411",
+     "rv_20240211_090521",
+     "rv_20240211_101841"
+    ]
+   },
    {
     "day": "DOM 11 FEB",
     "title": "Cruce en ferry: Caleta Gonzalo – Pichicolo",
@@ -940,6 +1074,13 @@ export const EXPEDITIONS = [
      "p_20240211_151009",
      "p_20240211_151743",
      "p_20240211_163422"
+    ],
+    "videos": [
+     "rv_20240211_141017",
+     "rv_20240211_142654",
+     "rv_20240211_144106",
+     "rv_20240211_144300",
+     "rv_20240211_150058"
     ]
    },
    {
@@ -951,6 +1092,10 @@ export const EXPEDITIONS = [
      "p_20240211_194617",
      "p_20240211_194625",
      "p_20240211_194630"
+    ],
+    "videos": [
+     "sv0",
+     "sv1"
     ]
    },
    {
@@ -977,6 +1122,10 @@ export const EXPEDITIONS = [
      "p_20240212_160215",
      "p_20240212_191308",
      "p_20240212_191311"
+    ],
+    "videos": [
+     "sv2",
+     "sv3"
     ]
    },
    {

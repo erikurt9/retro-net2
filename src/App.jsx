@@ -1,6 +1,6 @@
 import { useEffect, useReducer, useRef } from 'react'
 import { Camera, Film, Music2, Search, Play, Pause, Rewind, FastForward, SkipBack, SkipForward, Volume2, X, Sun, Moon, Tv, Mic, Clapperboard, Users, Database, Backpack } from 'lucide-react'
-import { REAL_PHOTOS, EXPEDITIONS } from './archivo.js'
+import { REAL_PHOTOS, REAL_VIDEOS, EXPEDITIONS } from './archivo.js'
 
 /* ===================== DATOS DE PRUEBA ===================== */
 const PHOTOS = [
@@ -17,6 +17,7 @@ const PHOTOS = [
 const ERAS = [['todo', 'Todas'], ['2024', '2024'], ['2022', '2022'], ['2021', '2021'], ['80s', 'Años 80'], ['90s', 'Años 90'], ['familia', 'Fotos familiares'], ['lugares', 'Lugares']]
 const PHOTO_BY_ID = Object.fromEntries(REAL_PHOTOS.map(p => [p.id, p]))
 const VIDEOS = [
+  ...REAL_VIDEOS,
   { id: 'sv0', kind: 'personal', title: "Selfie en la plaza", desc: "SEL22 · 11 feb 2024", dur: 43, color: '#3A8B88', src: '/media/sel22/videos/20240211_171709.mp4', poster: '/media/sel22/posters/20240211_171709.jpg' },
   { id: 'sv1', kind: 'personal', title: "Selfie con chaqueta", desc: "SEL22 · 11 feb 2024", dur: 22, color: '#3A8B88', src: '/media/sel22/videos/20240211_194314.mp4', poster: '/media/sel22/posters/20240211_194314.jpg' },
   { id: 'sv2', kind: 'personal', title: "El río turquesa", desc: "SEL22 · 12 feb 2024", dur: 13, color: '#3A8B88', src: '/media/sel22/videos/20240212_124132.mp4', poster: '/media/sel22/posters/20240212_124132.jpg' },
@@ -28,6 +29,7 @@ const VIDEOS = [
   { id: 'v5', kind: 'trailer', title: 'Noche en el Motel (1991)', desc: 'Suspenso de medianoche.', dur: 105, color: '#6b3fa0' },
   { id: 'v6', kind: 'trailer', title: 'El Último Videoclub (1995)', desc: 'Comedia sobre la era del VHS.', dur: 88, color: '#3A8B88' },
 ]
+const VIDEO_BY_ID = Object.fromEntries(VIDEOS.map(v => [v.id, v]))
 const TRACKS = [
   { id: 't1', title: 'Neón en la Avenida', artist: 'Kaleidoscopio 84', dur: 214 },
   { id: 't2', title: 'Domingo de Walkman', artist: 'Los Cassettes', dur: 187 },
@@ -203,6 +205,7 @@ export default function App() {
             {s.tab === 'ruta' && (() => {
               const ex = EXPEDITIONS.find(e => e.id === s.exp) ?? EXPEDITIONS[0]
               const total = ex.stops.reduce((n, st) => n + st.photos.length, 0)
+              const nVid = ex.stops.reduce((n, st) => n + (st.videos?.length ?? 0), 0)
               return (
                 <section className="fade-in" role="tabpanel" id="panel-ruta" aria-labelledby="tab-ruta">
                   <h2 className="mb-1 flex items-center gap-3 font-display text-3xl font-black">Ruta de mochileros <Backpack aria-hidden="true" /></h2>
@@ -212,7 +215,7 @@ export default function App() {
                   </div>
                   <div className="neo mb-8 rounded-2xl p-5">
                     <h3 className="font-display text-2xl font-black">{ex.title}</h3>
-                    <p className="font-lcd text-xl text-teal">{ex.range} · {ex.stops.length} paradas · {total} fotos</p>
+                    <p className="font-lcd text-xl text-teal">{ex.range} · {ex.stops.length} paradas · {total} fotos{nVid > 0 && ` · ${nVid} videos`}</p>
                     <p className="mt-2 max-w-2xl">{ex.blurb}</p>
                   </div>
                   <ol className="relative ml-2">
@@ -224,7 +227,18 @@ export default function App() {
                           <p className="font-lcd text-2xl text-terracota">{st.day}</p>
                           <h4 className="font-display text-xl font-bold">{st.title}</h4>
                           {st.note && <p className="mt-1 text-sm text-[var(--muted)]">{st.note}</p>}
-                          <ul className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+                          {st.videos?.length > 0 && (
+                            <ul className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+                              {st.videos.map(id => { const v = VIDEO_BY_ID[id]; return (
+                                <li key={id}><button onClick={() => set({ tab: 'videos', kind: 'personal', video: id, vPos: 0, vPlaying: true })} aria-label={`Ver video: ${v.title}`} className="btn relative block w-full overflow-hidden rounded-lg text-left transition hover:scale-[1.03]">
+                                  <img src={v.poster} alt="" loading="lazy" className="aspect-video w-full object-cover" />
+                                  <span className="absolute inset-0 grid place-items-center bg-black/30"><Play size={26} className="text-white" aria-hidden="true" /></span>
+                                  <span className="absolute inset-x-0 bottom-0 truncate bg-black/65 px-2 py-0.5 font-lcd text-base text-white">{v.title}</span>
+                                </button></li>
+                              ) })}
+                            </ul>
+                          )}
+                          <ul className={`mt-3 grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6 ${st.photos.length ? '' : 'hidden'}`}>
                             {st.photos.map(id => { const p = PHOTO_BY_ID[id]; return (
                               <li key={id}><button onClick={() => set({ photo: p })} aria-label={`Abrir foto: ${p.title}`} className="btn block overflow-hidden rounded-lg transition hover:scale-105"><img src={p.thumb} alt={p.title} loading="lazy" className="aspect-square w-full object-cover" /></button></li>
                             ) })}
