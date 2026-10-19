@@ -80,13 +80,13 @@ const TABS = [
 const now = new Date()
 const initial = {
   tab: 'quienes', exp: EXPEDITIONS[0].id, query: '', era: 'todo', kind: 'personal', crt: true, dark: true, burst: false,
-  track: 0, playing: false, pos: 0, volume: 70, video: null, vPlaying: false, vPos: 0, photo: null, plist: [],
+  track: 0, playing: false, pos: 0, volume: 70, video: null, vPlaying: false, vPos: 0, photo: null, plist: [], zoom: false,
   date: `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
 }
 function reducer(s, a) {
   switch (a.type) {
     case 'tab': return { ...s, tab: a.v }
-    case 'set': return { ...s, ...a.v }
+    case 'set': return { ...s, ...(a.v.photo !== undefined ? { zoom: false } : {}), ...a.v }
     case 'tick': return { ...s, pos: Math.min(s.pos + 1, TRACKS[s.track].dur) }
     case 'vtick': return { ...s, vPos: Math.min(s.vPos + 1, VIDEOS.find(v => v.id === s.video)?.dur ?? 0) }
     case 'pickTrack': return { ...s, track: a.v, pos: 0, playing: true }
@@ -94,7 +94,7 @@ function reducer(s, a) {
     case 'navPhoto': {
       const l = s.plist ?? []
       const n = s.photo ? l[l.findIndex(x => x.id === s.photo.id) + a.d] : null
-      return n ? { ...s, photo: n } : s
+      return n ? { ...s, photo: n, zoom: false } : s
     }
     default: return s
   }
@@ -105,7 +105,7 @@ export default function App() {
   const [s, d] = useReducer(reducer, initial)
   const searchRef = useRef(null)
   const videoRef = useRef(null)
-  const touchX = useRef(0)
+  const drag = useRef({ x: 0, moved: 0 })
   const sRef = useRef(s)
   sRef.current = s
   const set = v => d({ type: 'set', v })
@@ -409,13 +409,11 @@ export default function App() {
         </div>
 
         {s.photo && (
-          <div role="dialog" aria-modal="true" aria-label={s.photo.title} className="fixed inset-0 z-40 grid place-items-center bg-black/80 p-4" onClick={() => set({ photo: null })}>
-            <div className={`fade-in max-h-full w-full ${s.photo.src ? 'max-w-3xl' : 'max-w-md'} overflow-auto bg-[#FBF7F3] p-4 text-[#2A211C]`} onClick={e => e.stopPropagation()}>
-              <div key={s.photo.id} onTouchStart={e => { touchX.current = e.touches[0].clientX }} onTouchEnd={e => { const dx = e.changedTouches[0].clientX - touchX.current; if (Math.abs(dx) > 50) d({ type: 'navPhoto', d: dx < 0 ? 1 : -1 }) }} className={`develop relative ${s.photo.src ? '' : 'grid aspect-square place-items-center'}`} style={s.photo.src ? undefined : { background: `linear-gradient(135deg, ${s.photo.from}, ${s.photo.to})` }}>
-                {s.photo.src ? <img src={s.photo.src} alt={s.photo.title} className="w-full" /> : <Camera size={64} className="text-white/70" aria-hidden="true" />}
-                <button autoFocus aria-label="Cerrar" onClick={() => set({ photo: null })} className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-black/60 text-white"><X size={18} /></button>
-                {pi > 0 && <button aria-label="Foto anterior" onClick={() => d({ type: 'navPhoto', d: -1 })} className="btn absolute left-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/55 text-white"><ChevronLeft size={22} /></button>}
-                {pi >= 0 && pi < pl.length - 1 && <button aria-label="Foto siguiente" onClick={() => d({ type: 'navPhoto', d: 1 })} className="btn absolute right-2 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-black/55 text-white"><ChevronRight size={22} /></button>}
+          <div role="dialog" aria-modal="true" aria-label={s.photo.title} className="fixed inset-0 z-40 grid select-none place-items-center bg-black/80 p-2 sm:p-4" style={{ touchAction: s.zoom ? 'auto' : 'pan-y' }} onPointerDown={e => { drag.current = { x: e.clientX, moved: 0 } }} onPointerUp={e => { const dx = e.clientX - drag.current.x; drag.current.moved = Math.abs(dx); if (!s.zoom && Math.abs(dx) > 60) d({ type: 'navPhoto', d: dx < 0 ? 1 : -1 }) }} onClick={() => { if (drag.current.moved < 10) set({ photo: null }) }}>
+            <div className={`fade-in max-h-full w-full ${s.photo.src ? 'max-w-[96vw] sm:max-w-[min(94vw,1500px)]' : 'max-w-md'} overflow-auto ${s.zoom ? 'touch-auto' : 'touch-pan-y'} bg-[#FBF7F3] p-2 text-[#2A211C] sm:p-4`} onClick={e => e.stopPropagation()}>
+              <div key={s.photo.id} className={`develop relative ${s.photo.src ? '' : 'grid aspect-square place-items-center'}`} style={s.photo.src ? undefined : { background: `linear-gradient(135deg, ${s.photo.from}, ${s.photo.to})` }}>
+                {s.photo.src ? <div className={`bg-black ${s.zoom ? 'max-h-[76vh] overflow-auto' : ''}`}><img src={s.photo.src} alt={s.photo.title} draggable={false} onClick={() => { if (drag.current.moved < 10) set({ zoom: !s.zoom }) }} className={s.zoom ? 'max-w-none cursor-zoom-out' : 'mx-auto max-h-[76vh] w-full cursor-zoom-in object-contain'} /></div> : <Camera size={64} className="text-white/70" aria-hidden="true" />}
+                <button aria-label="Cerrar" onClick={() => set({ photo: null })} className="absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-black/60 text-white"><X size={18} /></button>
               </div>
               {[pl[pi - 1], pl[pi + 1]].filter(x => x?.src).map(x => <img key={x.id} src={x.src} alt="" className="hidden" />)}
               {pi >= 0 && pl.length > 1 && (
@@ -423,10 +421,13 @@ export default function App() {
                   {pl.length <= 12 ? pl.map((x, i) => <span key={x.id} className={`h-2 rounded-full transition-all ${i === pi ? 'w-5 bg-[#E05A47]' : 'w-2 bg-[#2A211C]/30'}`} />) : <span className="font-lcd text-xl text-[#7A6A60]">{pi + 1} / {pl.length}</span>}
                 </div>
               )}
+              {s.photo.src && <p className="mt-1 text-center text-xs text-[#7A6A60]">{s.zoom ? 'Toca la foto para ajustarla a la pantalla' : 'Toca la foto para verla en tamaño real'}</p>}
               <h3 className="mt-3 font-display text-2xl font-black">{s.photo.title}</h3>
               <p className="font-lcd text-xl text-[#C23B22]">{s.photo.src ? s.photo.place : `${s.photo.year} · ${s.photo.place}`}</p>
               <p className="mt-2 font-type">{s.photo.note}</p>
             </div>
+            {pi > 0 && <button aria-label="Foto anterior" onClick={e => { e.stopPropagation(); d({ type: 'navPhoto', d: -1 }) }} className="btn absolute left-2 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-black/70 text-white sm:left-4"><ChevronLeft size={26} /></button>}
+            {pi >= 0 && pi < pl.length - 1 && <button aria-label="Foto siguiente" onClick={e => { e.stopPropagation(); d({ type: 'navPhoto', d: 1 }) }} className="btn absolute right-2 top-1/2 z-10 grid h-12 w-12 -translate-y-1/2 place-items-center rounded-full bg-black/70 text-white sm:right-4"><ChevronRight size={26} /></button>}
           </div>
         )}
       </div>
