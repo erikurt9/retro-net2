@@ -1031,6 +1031,96 @@ export const REAL_VIDEOS = [
   "color": "#3A8B88",
   "src": "/media/archivo/videos/20240211_150058.mp4",
   "poster": "/media/archivo/posters/20240211_150058.jpg"
+ },
+ {
+  "id": "rv_20240211_150132",
+  "kind": "personal",
+  "title": "Agua del fiordo desde el ferry",
+  "desc": "11 feb 2024 · 15:01",
+  "dur": 26,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_150132.mp4",
+  "poster": "/media/archivo/posters/20240211_150132.jpg"
+ },
+ {
+  "id": "rv_20240211_150445",
+  "kind": "personal",
+  "title": "Costa con bosque desde el ferry",
+  "desc": "11 feb 2024 · 15:04",
+  "dur": 28,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_150445.mp4",
+  "poster": "/media/archivo/posters/20240211_150445.jpg"
+ },
+ {
+  "id": "rv_20240211_153111",
+  "kind": "personal",
+  "title": "Ruta junto al bosque",
+  "desc": "11 feb 2024 · 15:31",
+  "dur": 10,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_153111.mp4",
+  "poster": "/media/archivo/posters/20240211_153111.jpg"
+ },
+ {
+  "id": "rv_20240211_162754",
+  "kind": "personal",
+  "title": "En la tolva de una camioneta",
+  "desc": "11 feb 2024 · 16:27",
+  "dur": 28,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_162754.mp4",
+  "poster": "/media/archivo/posters/20240211_162754.jpg"
+ },
+ {
+  "id": "rv_20240211_163237",
+  "kind": "personal",
+  "title": "Pies en alto en la camioneta",
+  "desc": "11 feb 2024 · 16:32",
+  "dur": 16,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_163237.mp4",
+  "poster": "/media/archivo/posters/20240211_163237.jpg"
+ },
+ {
+  "id": "rv_20240211_164151",
+  "kind": "personal",
+  "title": "Camino entre helechos y nubes",
+  "desc": "11 feb 2024 · 16:41",
+  "dur": 16,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_164151.mp4",
+  "poster": "/media/archivo/posters/20240211_164151.jpg"
+ },
+ {
+  "id": "rv_20240211_205255",
+  "kind": "personal",
+  "title": "Atardecer entre los árboles",
+  "desc": "11 feb 2024 · 20:52",
+  "dur": 7,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_205255.mp4",
+  "poster": "/media/archivo/posters/20240211_205255.jpg"
+ },
+ {
+  "id": "rv_20240211_211434",
+  "kind": "personal",
+  "title": "Carpa naranja en el campamento",
+  "desc": "11 feb 2024 · 21:14",
+  "dur": 9,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240211_211434.mp4",
+  "poster": "/media/archivo/posters/20240211_211434.jpg"
+ },
+ {
+  "id": "rv_20240212_102154",
+  "kind": "personal",
+  "title": "Árboles y cerros bajo cielo azul",
+  "desc": "12 feb 2024 · 10:21",
+  "dur": 11,
+  "color": "#3A8B88",
+  "src": "/media/archivo/videos/20240212_102154.mp4",
+  "poster": "/media/archivo/posters/20240212_102154.jpg"
  }
 ]
 export const EXPEDITIONS = [
@@ -1080,7 +1170,21 @@ export const EXPEDITIONS = [
      "rv_20240211_142654",
      "rv_20240211_144106",
      "rv_20240211_144300",
-     "rv_20240211_150058"
+     "rv_20240211_150058",
+     "rv_20240211_150132",
+     "rv_20240211_150445"
+    ]
+   },
+   {
+    "day": "DOM 11 FEB · TARDE",
+    "title": "En ruta después del ferry",
+    "note": "Camino entre bosque y helechos, viajando en la tolva de una camioneta con las mochilas.",
+    "photos": [],
+    "videos": [
+     "rv_20240211_153111",
+     "rv_20240211_162754",
+     "rv_20240211_163237",
+     "rv_20240211_164151"
     ]
    },
    {
@@ -1096,6 +1200,16 @@ export const EXPEDITIONS = [
     "videos": [
      "sv0",
      "sv1"
+    ]
+   },
+   {
+    "day": "DOM 11 FEB · NOCHE",
+    "title": "Campamento",
+    "note": "Atardecer entre los árboles y la carpa naranja armada.",
+    "photos": [],
+    "videos": [
+     "rv_20240211_205255",
+     "rv_20240211_211434"
     ]
    },
    {
@@ -1124,6 +1238,7 @@ export const EXPEDITIONS = [
      "p_20240212_191311"
     ],
     "videos": [
+     "rv_20240212_102154",
      "sv2",
      "sv3"
     ]
